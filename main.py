@@ -73,7 +73,7 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('index'))
             else:
                 flash('Incorrect passsword or username','warning')
     
@@ -82,7 +82,7 @@ def login():
 
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
-def dashboard():
+def index():
     return render_template('index.html')
 
 
@@ -103,7 +103,6 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
-
     return render_template('register.html', form=form)
 
 
