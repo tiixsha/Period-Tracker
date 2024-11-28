@@ -1,11 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insights</title>
-</head>
-<body>
-    
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header class="masthead" style = "background-color:rgb(255, 147, 189)">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Insights</h1>
+                    <span class="subheading">Unlock the Patterns of Your Cycle with Insights</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="accordion" id="qaAccordion">
+        <!-- Q1 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    What exactly is discharge?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#qaAccordion">
+                <div class="accordion-body">
+                    <p class="verified">✔ Answered by Dr. Barbara Levy</p>
+                    Vaginal discharge is a combination of bacteria, mucus, and fluid produced by the vagina and cervix that is shed through the vagina. It helps to keep the vagina clean and healthy, lubricates the vaginal tissues, and protects against infection.
+                </div>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Is my discharge normal?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#qaAccordion">
+                <div class="accordion-body">
+                    Discharge is considered normal when it is clear, white, or slightly yellow without a strong odor or discomfort. If you notice changes like unusual color, foul smell, or irritation, it may be time to consult a healthcare provider.
+                </div>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    How can I track my cycle better?
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#qaAccordion">
+                <div class="accordion-body">
+                    Use a reliable period tracker app to log your cycle start date, end date, and symptoms. You can also take note of discharge patterns, mood changes, and other physical symptoms to predict your ovulation and period dates more accurately.
+                </div>
+            </div>
+        </div>
+        <!-- Q4 -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingF">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    When to see your doctor?
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#qaAccordion">
+                <div class="accordion-body">
+                    <p class="verified">✔ Answered by BetterHealth</p>
+                    Talk to your doctor if you are worried about your periods. For example, if:
+                    <li>Your period patterns change</li>
+                    <li>Your periods are getting heavier (i.e. you need to change your pad or tampon more often than every 2 hours)</li>
+                    <li>Your periods last more than 8 days</li>
+                    <li>Your periods come less than 21 days apart</li>
+                    <li>Your periods come more than 2 to 3 months apart</li>
+                    <li>Your symptoms are so painful they affect your quality of life</li>
+                    <li>Your bleed between periods</li>
+                    <li>Your bleed after sexual intercourse.</li>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+{% include "footer.html" %}
 </body>
 </html>

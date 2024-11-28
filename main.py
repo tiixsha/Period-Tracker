@@ -11,6 +11,7 @@ from flask_bcrypt import Bcrypt
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 import random
+import requests
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -20,7 +21,6 @@ app.config['SECRET_KEY'] = 'dont_byte_me'
 engine=create_engine('sqlite:///database.db')
 session=Session(engine)
 
-# Set up LangChain model and prompt template
 template = """
 Answer the question below.
 
@@ -119,7 +119,7 @@ def index():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 
 @ app.route('/register', methods=['GET', 'POST'])
@@ -161,10 +161,20 @@ def add_period():
     except Exception as e:
         flash(f"An error occurred: {e}", "error")
         return redirect(url_for('index'))
+    
+posts = requests.get("https://api.npoint.io/52c34ad3eef508164a62").json() 
 
 @app.route('/blog')
 def blog():
-    return render_template("blogs.html")
+    return render_template('blogs.html',all_posts=posts)
+@app.route("/post/<int:index>")
+
+def show_post(index):
+    requested_post = None
+    for blog_post in posts:
+        if blog_post["id"] == index:
+            requested_post = blog_post
+    return render_template("post.html", post=requested_post)
 
 @app.route('/insights')
 def insights():
