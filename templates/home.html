@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Flow Sync</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    <style>
+      
+    </style>
 </head>
+<body class="home">
+    <!-- Header -->
+    <header>
+        <div class="header-title">
+            <img src="static/assets/logo.png" alt="Logo">
+            Flow Sync
+        </div>
+       
+    </header>
 
-<body>
-    
-    <h1>Login</h1>
-    <a href="{{ url_for('login') }}">Login Page</a><br>
-    <a href="{{ url_for('register') }}">Register Page</a><br>
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="left-container">
+            <h2>About Us</h2>
+            <p>At Flow Sync, we’re more than just a tracker – we’re a community. Our blogs, forums, and resources provide a supportive space to share, learn, and grow. Together, we’re breaking the stigma around menstruation and fostering a culture of health and awareness.
+                New to Period Tracking? Sign in to access our Beginner’s Guide, designed for newcomers or young individuals starting their menstrual health journey. 
+                Perfect for teens or first-time users, this step-by-step guide helps you understand your cycle and make the most of our platform.
+                Your Personalized Experience Awaits. Sign in to customize your dashboard, track your journey, and join a supportive community.
+                We’re here to guide you every step of the way—wherever you are in your menstrual health journey.
+            </p>
+            <div class="buttons-container">
+                <button onclick="location.href='{{url_for('login')}}'">Log In</button>
+                <button onclick="location.href='{{url_for('register')}}'">Sign Up</button>
+            </div>
+        </div>
 
+        <div class="right-container">
+            <a href="blog1.html" class="blog-post">Blog 1</a>
+            <a href="blog2.html" class="blog-post">Blog 2</a>
+            <a href="blog3.html" class="blog-post">Blog 3</a>
+            <a href="blog4.html" class="blog-post">Blog 4</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+        <p>&copy; 2024 Flow Sync. All Rights Reserved.</p>
+    </footer>
 </body>
-
 </html>

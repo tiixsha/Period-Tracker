@@ -1,16 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "header.html" %}
+<!-- Page Header-->
+<header class="masthead" style = "background-color:rgb(255, 147, 189)">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Period Tracker</h1>
+                    <span class="subheading">Redefining what it means to track your flow.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
 
+
+<!-- Main Content -->
 <body>
-    <h1>Hello you are logged in.</h1>
-    <a href="{{url_for('logout')}}">Press here to logout</a>
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <!-- Form Section: Add Period Date -->
+                <h2 class="mb-4">Add a new period date</h2>
+                
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form action="/add" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="period_date" class="form-label">Period Start Date:</label>
+                        <input type="date" id="period_date" name="period_date" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Period</button>
+                </form>
+                
+                <!-- Spacer between form and table -->
+                <hr class="my-4">
+                
+                <!-- Table Section: Previous Periods -->
+                <h2 class="mb-3">Previous Periods</h2>
+                {% if periods %}
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% for period in periods %}
+                                <tr>
+                                    <td>{{ period.period_date.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('delete', period_id=period.id) }}">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No periods recorded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Pager -->
+    <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-primary text-uppercase" href="{{ url_for('predict_next_period') }}">Next Cycle →</a>
+    </div>
 </body>
 
-</html>
+{% include "footer.html" %}
