@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect,flash,request
+from flask import Flask, render_template, url_for, redirect,flash,request,jsonify
 from datetime import datetime,timedelta
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, Float, create_engine,extract
@@ -8,6 +8,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import ChatPromptTemplate
+import random
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -17,6 +20,20 @@ app.config['SECRET_KEY'] = 'dont_byte_me'
 engine=create_engine('sqlite:///database.db')
 session=Session(engine)
 
+# Set up LangChain model and prompt template
+template = """
+Answer the question below.
+
+Here is the conversation history: {context}
+
+Question: {question}
+"""
+model = OllamaLLM(model="llama3")
+prompt = ChatPromptTemplate.from_template(template)
+chain = prompt | model
+
+# In-memory storage for conversation history
+conversation_history = ""
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -153,9 +170,44 @@ def blog():
 def insights():
     return render_template("insights.html")
 
-@app.route('/predict_next_period')
-def predict_next_period():
-    return "next period"
+def determine_menstrual_phase(days_remaining):
+    if days_remaining <= 7:
+        return "Early Follicular Phase","Low"
+    elif days_remaining < 14:
+        return "Late Follicular Phase","High"
+    elif days_remaining == 14:
+        return "Ovulation Phase","Very High"
+    elif days_remaining <= 21:
+        return "Early Luteal Phase","Moderate"
+    elif days_remaining <= 31:
+        return "Late Luteal Phase","Low"
+    else:
+        return "Menstrual Phase","Low"
+
+
+@app.route('/next_cycle')
+def next_cycle():
+    periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()#extracts data from Period class in ascending order of date.(latest addded at last)
+    if len(periods) < 2:
+        return render_template('next_cycle.html',msg_sent = False,msg = "Not enough data to predict your cycle")
+    else:
+        period_dates = [period.period_date for period in periods] # creates a list of period_dates from our database
+        cycle_length = [(period_dates[i+1]-period_dates[i]).days for i in range(len(period_dates)-1)]
+        avg_cycle_length = sum(cycle_length)/len(cycle_length)
+        last_period_date = period_dates[-1]
+        next_period_date = last_period_date + timedelta(days=avg_cycle_length)
+        ovulation_date = next_period_date - timedelta(days=14)
+        discharge_date = ovulation_date - timedelta(days=random.randint(5, 7))
+        days_remaining = (next_period_date-datetime.now()).days
+        if days_remaining < 0:
+            return render_template('next_cycle.html',msg_sent = False,msg = "Irregular period detected. It is better to seek medical help if it lasts more than 35 days.")
+        elif days_remaining > 35:
+            return render_template('next_cycle.html',msg_sent = False,msg = "Invalid information entered.")
+        else:
+            determine_menstrual_phase(days_remaining)
+            menstrual_phase,chance_of_pregnancy = determine_menstrual_phase(days_remaining)
+            return render_template('next_cycle.html',next_period = next_period_date.strftime('%Y-%m-%d'),days_remaining = days_remaining,menstrual_phase = menstrual_phase, msg_sent = True,chance_of_pregnancy =chance_of_pregnancy)
+
 
 @app.route('/delete/<int:period_id>', methods=["GET", "POST"])
 def delete(period_id):
@@ -164,6 +216,35 @@ def delete(period_id):
     db.session.delete(period_to_delete)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/chatbot')
+def chatbot():
+    return render_template('chatbot.html')
+
+# API endpoint for chatbot responses
+@app.route('/chat', methods=['POST'])
+def chat():
+    global conversation_history
+    user_message = request.json.get('message', '')
+
+    # Generate response using LangChain
+    result = chain.invoke({"context": conversation_history, "question": user_message})
+    bot_response = str(result)
+
+    # Update conversation history
+    conversation_history += f"\nUser: {user_message}\nAI: {bot_response}"
+
+    return jsonify({'response': bot_response})
+    
+    # Simple chatbot logic (replace this with actual chatbot logic)
+    if user_message.lower() == "hello":
+        bot_response = "Hi there! How can I assist you today?"
+    elif user_message.lower() == "bye":
+        bot_response = "Goodbye! Have a great day!"
+    else:
+        bot_response = "I'm sorry, I don't understand that. Can you try rephrasing?"
+
+    return jsonify({'response': bot_response})
 
 if __name__ == "__main__":
     with app.app_context():

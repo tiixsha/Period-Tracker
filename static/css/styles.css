@@ -10587,6 +10587,7 @@ blockquote {
 }
 #mainNav .navbar-brand {
   font-weight: 800;
+  padding-left: 10px;
 }
 #mainNav .navbar-toggler {
   font-size: 0.75rem;
@@ -10786,6 +10787,7 @@ header.masthead .post-heading .meta a {
     font-size: 2.25rem;
   }
 }
+
 body.next_cycle {
   body {
     font-family: Arial, sans-serif;
@@ -10801,7 +10803,9 @@ body.next_cycle {
 }
 .chart-container {
     position: relative;
+    margin: 0 auto;
     height: 300px;
+
 }
 }
   
@@ -10956,8 +10960,8 @@ color: #0085A1;
 }
 
 
-/* For */
-/* General Styles */
+/* For home page*/
+
 * {
   margin: 0;
   padding: 0;
@@ -10968,7 +10972,7 @@ body.home {
   font-family: 'Playfair Display', serif;
   background-color: #f5f5f5;
   color: #333;
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
 }
@@ -10976,7 +10980,7 @@ body.home {
 /* Header Styles */
 header {
   background-color: #d6cfc7;
-  padding: 20px 90px;
+  padding: 5px 60px;
   display: flex;
   font-family: var(--bs-body-font-family);
   text-align: center;
@@ -10990,11 +10994,11 @@ header {
 
 .main-container {
     display: flex;
-    gap: 45px;
-    padding: 60px 70px;
+    gap: 50px;
+    padding: 50px 35px;
     flex: 1;
-    min-height: 100vh;
-    margin-bottom: 100px;
+    min-height: 60vh;
+    margin-bottom: 80px;
 }
 
 .left-container {
@@ -11012,7 +11016,7 @@ header {
 
 .left-container h2 {
     font-family: var(--bs-body-font-family);  
-    font-size: 3rem; /* Increased font size */
+    font-size: 2.5rem; /* Increased font size */
     margin-bottom: 20px;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* Slightly stronger text shadow */
     text-align: left; /* Left-align the title */
@@ -11020,7 +11024,7 @@ header {
 
 .left-container p {
   font-family: var(--bs-body-font-family);
-  font-size: 1.5rem; /* Increased font size */
+  font-size: 20px; /* Increased font size */
   margin-bottom: 30px; /* Space below the paragraph */
   text-align: left; /* Center-align the text */
   line-height: 2; /* Add space between lines */
@@ -11085,7 +11089,7 @@ header {
 
 .blog-post {
     background-color: #b4cfdd;
-    padding: 80px;
+    padding: 65px;
     border-radius: 80px;
     text-align: center;
     font-size: 1.2rem;
@@ -11113,7 +11117,7 @@ header {
 /* Footer Styles */
 footer {
     background-color: #d6cfc7;
-    padding: 20px 0;
+    padding: 15px 0;
     text-align: center;
     color: rgb(56, 8, 8);
     margin-top: auto;
@@ -11137,4 +11141,3 @@ footer .social-icons a:hover {
 footer p {
     font-size: 20px;
 }
- 

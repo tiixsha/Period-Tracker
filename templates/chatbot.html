@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include "header.html" %}
+    <header class="masthead" style = "background-color:rgb(255, 147, 189)">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1><b>FlowBot</b></h1>
+                        <span class="subheading"> Your cycle, your support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+<head>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Chat Container */
+        .chat-container {
+            width: 90%; /* 90% width to be responsive */
+            max-width: 800px; /* Keep max-width reasonable */
+            min-width: 600px; /* Ensure chat is wide enough */
+            margin: 50px auto;
+            border: 1px solid #ddd;
+            border-radius: 12px; /* Rounded corners for a more friendly look */
+            padding: 20px;
+            background-color: #f9f9f9; /* Light background for the container */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+        }
+    
+        /* Messages Container */
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #fff; /* White background for messages */
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+    
+        .message {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 75%; /* Ensure message doesn't take up full width */
+            font-size: 16px;
+            line-height: 1.4;
+        }
+    
+        /* Style for the user’s message */
+        .message.user {
+            background-color: #37a9e1; /* Light blue background for user */
+            color: white;
+            text-align: right; /* User messages align to the right */
+            margin-left: auto;
+        }
+    
+        /* Style for the bot’s message */
+        .message.bot {
+            background-color: #e0e0e0; /* Light gray background for bot */
+            color: #333;
+            text-align: left; /* Bot messages align to the left */
+            margin-right: auto;
+        }
+    
+        /* Scrollbar styling */
+        .messages::-webkit-scrollbar {
+            width: 8px;
+        }
+    
+        .messages::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+    
+        /* Message Input Area */
+        .input-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+    
+        .input-area input {
+            width: 85%;
+            padding: 12px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+    
+        .input-area input:focus {
+            border-color: #37a9e1; /* Focus state with blue border */
+        }
+    
+        /* Submit Button */
+        .input-area button {
+            padding: 12px 20px;
+            background-color:rgb(37, 150, 190); /* Button color */
+            color: white;
+            border: none;
+            border-radius: 30px; /* Round button */
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        .input-area button:hover {
+            background-color: rgb(37, 150, 190); /* Darker shade on hover */
+            transform: scale(1.05); /* Slight grow effect on hover */
+        }
+    
+        .input-area button:active {
+            background-color: rgb(19, 94, 123); /* Even darker on click */
+        }
+    </style>
+    
+</head>
+<body class = "chatbot">
+    <div class="chat-container">
+        <div class="messages" id="chatMessages"></div>
+        <div class="input-group">
+            <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
+            <button class="btn btn-primary" id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Function to append messages to the chat window
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Event listener for the send button
+        sendButton.addEventListener('click', () => {
+            const message = userInput.value;
+            if (message.trim() === '') return;
+
+            appendMessage(message, 'user'); // Display user's message
+            userInput.value = '';
+
+            // Send message to the server
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage(data.response, 'bot'); // Display bot's response
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                appendMessage("Oops! Something went wrong.", 'bot');
+            });
+        });
+
+        // Enter key support for sending messages
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+{% include "footer.html" %}
+</html>
