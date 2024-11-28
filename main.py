@@ -1,13 +1,14 @@
 from flask import Flask, render_template, url_for, redirect,flash,request
-from datetime import datetime, timedelta
+from datetime import datetime,timedelta
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, Float, create_engine
+from sqlalchemy import Column, String, Integer, Float, create_engine,extract
 from sqlalchemy.orm import Session
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
-from flask_bcrypt import Bcrypt 
+from flask_bcrypt import Bcrypt
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -94,7 +95,7 @@ def login():
 @login_required
 def index():
     periods = Period.query.order_by(Period.period_date.desc()).all() 
-    return render_template('index.html', periods=periods)
+    return render_template('index.html', periods=periods,id = current_user_id)  
  
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -122,14 +123,17 @@ def add_period():
     
         date_input = request.form.get('period_date')# Retrieve and parse the date from the form
         period_date = datetime.strptime(date_input, "%Y-%m-%d")
-        
+        period_month = period_date.month
         # Check if the date already exists in the database
         existing_period = Period.query.filter((Period.period_date == period_date) & (Period.user_id == current_user_id)).first()
          # queries the database to find an existing record in the Period table that matches a specific period_date and returns the first result
         if existing_period:
             flash("This date already exists in the database.", "warning")
             return redirect(url_for('index'))
-
+        existing_month = Period.query.filter((extract('year', Period.period_date)== period_date.year)&((extract('month', Period.period_date) == period_date.month)) & (Period.user_id == current_user_id)).first()
+        if existing_month:
+            flash("You've already entered the data for this month", "warning")
+            return redirect(url_for('index'))
         # Create a new Period instance
         new_period = Period(period_date=period_date,user_id=current_user_id)
         # Add the period to the database
@@ -143,11 +147,11 @@ def add_period():
 
 @app.route('/blog')
 def blog():
-    return "BLOGS"
+    return render_template("blogs.html")
 
 @app.route('/insights')
 def insights():
-    return "INSIGHTS"
+    return render_template("insights.html")
 
 @app.route('/predict_next_period')
 def predict_next_period():

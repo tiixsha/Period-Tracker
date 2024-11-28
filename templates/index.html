@@ -55,16 +55,16 @@
                                 <th>Date</th>
                             </tr>
                         </thead>
-                        <tbody> 
+                        <tbody>                          
                             {% for period in periods %}
-                                <tr>
-                                    <td>{{ period.period_date.strftime('%Y-%m-%d') }}</td>
-                                    <td>
-                                        <a href="{{ url_for('delete', period_id=period.id) }}">
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
+                                {% if period.user_id == id %}
+                                    <tr>
+                                        <td>{{ period.period_date.strftime('%Y-%m-%d') }}</td>
+                                        <td>
+                                            <a href="{{ url_for('delete', period_id=period.id) }}">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                             
                         </tbody>

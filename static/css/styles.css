@@ -10915,7 +10915,45 @@ header img {
     font-size: 1rem;
     transition: color 0.3s;
 }
+/* Scope the styles to only affect the login-container */
+.parent-container { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  }
+.login-container {
+background: #ffffff;
+padding: 2rem;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 100%;
+max-width: 400px;
+}
 
+.login-container .btn-signup {
+color: white;
+background-color: #ff93bd;
+border: none;
+padding: 0.5rem 1rem;
+border-radius: 5px;
+transition: background-color 0.3s ease;
+}
+
+.login-container .alert-dismissible .btn-close {
+float: right;
+}
+
+.login-container h1 {
+font-size: 1.75rem;
+margin-bottom: 1.5rem;
+text-align: center;
+}
+
+.login-container a {
+text-decoration: none;
+color: #0085A1;
+}
 
 
 /* For */
