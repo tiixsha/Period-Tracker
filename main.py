@@ -39,6 +39,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+posts = requests.get("https://api.npoint.io/52c34ad3eef508164a62").json() 
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -88,8 +89,7 @@ class LoginForm(FlaskForm):
 
 @app.route('/')
 def home():
-    return render_template('home.html')
-
+    return render_template('home.html',all_posts = posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -166,7 +166,7 @@ def add_period():
         flash(f"An error occurred: {e}", "error")
         return redirect(url_for('index'))
     
-posts = requests.get("https://api.npoint.io/52c34ad3eef508164a62").json() 
+
 
 @app.route('/blog')
 def blog():
@@ -263,6 +263,14 @@ def chat  ():
 @app.route('/beginners')
 def beginners():
     return render_template("beginners.html")
+
+@app.route('/history')
+def history():
+    periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()
+    period_dates = [period.period_date for period in periods]
+    cycle_length = [(period_dates[i+1]-period_dates[i]).days for i in range(len(period_dates)-1)]
+    labels=[i+1 for i in range(len(cycle_length))]
+    return render_template('history.html',values=cycle_length,labels=labels)
 
 if __name__ == "__main__":
     with app.app_context():

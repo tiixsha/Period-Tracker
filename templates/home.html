@@ -38,10 +38,9 @@
         </div>
 
         <div class="right-container">
-            <a href="blog1.html" class="blog-post">Blog 1</a>
-            <a href="blog2.html" class="blog-post">Blog 2</a>
-            <a href="blog3.html" class="blog-post">Blog 3</a>
-            <a href="blog4.html" class="blog-post">Blog 4</a>
+            {% for post in all_posts: %}
+            <a href="{{ url_for('show_post', index=post.id) }}" class="blog-post">{{post.title}}</a>
+            {% endfor %}
         </div>
     </div>
 

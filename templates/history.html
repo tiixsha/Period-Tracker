@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include "header.html" %}
+    <!-- Page Header-->
+    <header class="masthead" style="background-color:rgb(255, 147, 189)">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1>Cycle History And Trends</h1>
+                        <span class="subheading">Redefining what it means to track your flow.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cycle Length Graph</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+        <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="chart-page">
+            <div class="chart-container">
+                <div class="data-container" id="raw-data">
+                    <h2>Your Cycle Lengths:</h2>
+                    <table id="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cycle No</th>
+                                <th>Days</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="graph-container">
+                    <h3>Graph: Variation in Cycle Length</h3>
+                    <canvas id="lineChart" width="900" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        <script>
+            // JavaScript code to handle displaying raw data and the chart
+            document.addEventListener('DOMContentLoaded', (event) => {
+                // Sample data, replace with your actual data
+                var labels = {{ labels|safe }};
+                var values = {{ values|safe }};
+    
+                // Display raw data in table
+                var dataTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+                for (var i = 0; i < labels.length; i++) {
+                    var row = dataTable.insertRow();
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    cell1.textContent = `Cycle ${labels[i]}`;
+                    cell2.textContent = `${values[i]} days`;
+                }
+    
+                // Create the chart
+                var ctx = document.getElementById("lineChart").getContext("2d");
+                var lineChart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Cycle Lengths",
+                            data: values,
+                            fill: false,
+                            borderColor: "rgb(75, 192, 192)",
+                            lineTension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    min: 0,
+                                    beginAtZero: true 
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+        </script>
+    </body>
+    {% include "footer.html" %}
+</html>
