@@ -19,31 +19,31 @@
         /* Main Container for flex layout */
         .main-container {
             display: flex;
-            justify-content: space-evenly; /* Space between the containers evenly */
-            gap: 30px; /* Space between the two containers */
+            justify-content: space-evenly;
+            gap: 30px; 
             margin: 60px auto;
-            max-width: 90%; /* Increased max-width for larger containers */
+            max-width: 90%; 
         }
 
         /* Common style for both containers */
         .container-box {
             flex: 1;
             border: 1px solid #ddd;
-            border-radius: 12px; /* Rounded corners for a more friendly look */
-            padding: 40px; /* Increased padding for larger look */
-            background-color: #f9f9f9; /* Light background for the container */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+            border-radius: 12px; 
+            padding: 40px; /
+            background-color: #f9f9f9;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
             display: flex;
             flex-direction: column;
-            min-height: 600px; /* Increased minimum height */
+            min-height: 600px; 
         }
 
         /* Messages Container */
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px; /* Increased padding for larger look */
-            background-color: #fff; /* White background for messages */
+            padding: 20px; 
+            background-color: #fff; 
             border-radius: 8px;
             border: 1px solid #e0e0e0;
             margin-bottom: 20px;
@@ -53,24 +53,24 @@
             margin-bottom: 12px;
             padding: 10px;
             border-radius: 10px;
-            max-width: 75%; /* Ensure message doesn't take up full width */
+            max-width: 75%; /
             font-size: 16px;
             line-height: 1.4;
         }
     
         /* Style for the user’s message */
         .message.user {
-            background-color: #37a9e1; /* Light blue background for user */
+            background-color: #37a9e1; 
             color: white;
-            text-align: right; /* User messages align to the right */
+            text-align: right; 
             margin-left: auto;
         }
     
         /* Style for the bot’s message */
         .message.bot {
-            background-color: #e0e0e0; /* Light gray background for bot */
+            background-color: #e0e0e0; 
             color: #333;
-            text-align: left; /* Bot messages align to the left */
+            text-align: left; 
             margin-right: auto;
         }
     
@@ -95,38 +95,38 @@
     
         .input-area input {
             width: 85%;
-            padding: 14px 20px; /* Increased padding */
+            padding: 14px 20px; 
             border-radius: 20px;
             border: 1px solid #ddd;
-            font-size: 18px; /* Larger font size */
+            font-size: 18px; 
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s;
         }
     
         .input-area input:focus {
-            border-color: #37a9e1; /* Focus state with blue border */
+            border-color: #37a9e1; 
         }
     
         /* Submit Button */
         .input-area button {
-            padding: 14px 25px; /* Increased padding */
-            background-color: rgb(37, 150, 190); /* Button color */
+            padding: 14px 25px; 
+            background-color: rgb(37, 150, 190); 
             color: white;
             border: none;
-            border-radius: 30px; /* Round button */
+            border-radius: 30px; 
             cursor: pointer;
-            font-size: 18px; /* Larger font size */
+            font-size: 18px; 
             transition: background-color 0.3s, transform 0.2s;
         }
     
         .input-area button:hover {
-            background-color: rgb(37, 150, 190); /* Darker shade on hover */
-            transform: scale(1.05); /* Slight grow effect on hover */
+            background-color: rgb(37, 150, 190); 
+            transform: scale(1.05); 
         }
     
         .input-area button:active {
-            background-color: rgb(19, 94, 123); /* Even darker on click */
+            background-color: rgb(19, 94, 123); 
         }
     </style>
 </head>
@@ -142,7 +142,6 @@
         </div>
 
         <div class="container-box">
-            <!-- Add any additional content or widgets here -->
             <h2>Symptom Patterns</h2>
             <div class="accordion" id="qaAccordion">
                 <!-- Q1 -->
@@ -206,7 +205,7 @@
                             Headaches or Migraines
                         </button>
                     </h2>
-                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#qaAccordion">
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#qaAccordion">
                         <div class="accordion-body">
                             Headaches or migraines are a frequent symptom during menstruation, often linked to hormonal changes throughout the menstrual cycle.Managing menstrual headaches can include staying hydrated, maintaining a balanced diet, managing stress, and using over-the-counter pain relief.
                     </div>
@@ -221,7 +220,6 @@
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
 
-        // Function to append messages to the chat window
         function appendMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', sender);
@@ -230,15 +228,13 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // Event listener for the send button
         sendButton.addEventListener('click', () => {
             const message = userInput.value;
             if (message.trim() === '') return;
 
-            appendMessage(message, 'user'); // Display user's message
+            appendMessage(message, 'user'); 
             userInput.value = '';
 
-            // Send message to the server
             fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -246,7 +242,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                appendMessage(data.response, 'bot'); // Display bot's response
+                appendMessage(data.response, 'bot'); 
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -254,7 +250,6 @@
             });
         });
 
-        // Enter key support for sending messages
         userInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 sendButton.click();
