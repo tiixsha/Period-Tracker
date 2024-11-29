@@ -151,6 +151,10 @@ def add_period():
         if existing_month:
             flash("You've already entered the data for this month", "warning")
             return redirect(url_for('index'))
+        future_date = (period_date.month>datetime.now().month) & (period_date.year == datetime.now().year)
+        if future_date:
+            flash("Invalid Date","warning")
+            return redirect(url_for('index'))
         # Create a new Period instance
         new_period = Period(period_date=period_date,user_id=current_user_id)
         # Add the period to the database
@@ -167,8 +171,8 @@ posts = requests.get("https://api.npoint.io/52c34ad3eef508164a62").json()
 @app.route('/blog')
 def blog():
     return render_template('blogs.html',all_posts=posts)
-@app.route("/post/<int:index>")
 
+@app.route("/post/<int:index>")
 def show_post(index):
     requested_post = None
     for blog_post in posts:
@@ -233,7 +237,7 @@ def chatbot():
 
 # API endpoint for chatbot responses
 @app.route('/chat', methods=['POST'])
-def chat():
+def chat  ():
     global conversation_history
     user_message = request.json.get('message', '')
 
@@ -255,6 +259,10 @@ def chat():
         bot_response = "I'm sorry, I don't understand that. Can you try rephrasing?"
 
     return jsonify({'response': bot_response})
+
+@app.route('/beginners')
+def beginners():
+    return render_template("beginners.html")
 
 if __name__ == "__main__":
     with app.app_context():

@@ -6,12 +6,11 @@
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="site-heading">
-                    <h1>{{ post.title }}</h1>
-                    <span class="subheading">{{ post.subtitle }}</span>
-                    <span class="meta">Posted by
-                        <a href="#">{{ post.author }}</a>
-                        on {{ post.date }}
-                    </span>
+                    <div class="container" style="width: 120%; max-width: 2000px; margin: 0 auto;">
+                        <h2 class="post-title" style="font-size: 44px;">{{ post.title }}</h2>
+                      </div>
+                      <span class="subheading" style="font-size: 21px;">{{ post.subtitle }}</span>
+                    
                 </div>
             </div>
         </div>
@@ -23,8 +22,11 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
-                <p>{{ post.body }}
+
+                <p>{{ post.body | safe }}</p>
+                <span class="meta"><b>Posted by {{ post.author }} on {{ post.subtitle }}</b></span>
             </div>
+            
         </div>
     </div>
 </article>

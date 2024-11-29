@@ -10994,7 +10994,7 @@ header {
 
 .main-container {
     display: flex;
-    gap: 50px;
+    gap: 25px;
     padding: 50px 35px;
     flex: 1;
     min-height: 60vh;
@@ -11005,7 +11005,7 @@ header {
     flex: 1;
     background-color:#be718f;
     color: white;
-    border-radius: 80px;
+    border-radius: 50px;
     padding: 60px;
     display: flex;
     flex-direction: column;
@@ -11024,7 +11024,7 @@ header {
 
 .left-container p {
   font-family: var(--bs-body-font-family);
-  font-size: 20px; /* Increased font size */
+  font-size: 19px; /* Increased font size */
   margin-bottom: 30px; /* Space below the paragraph */
   text-align: left; /* Center-align the text */
   line-height: 2; /* Add space between lines */
@@ -11090,7 +11090,7 @@ header {
 .blog-post {
     background-color: #b4cfdd;
     padding: 65px;
-    border-radius: 80px;
+    border-radius: 50px;
     text-align: center;
     font-size: 1.2rem;
     text-decoration: none;
@@ -11140,4 +11140,79 @@ footer .social-icons a:hover {
 
 footer p {
     font-size: 20px;
+}
+ /* FOR BEGINNERS */
+
+ body.beginners {
+  font-family: var(--bs-body-font-family);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background-color: #f0e6e6;
+}
+
+/* Content Container */
+.content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto; /* Center the content container */
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Card styling */
+.card {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto; /* Center the card */
+  background-color: #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: var(--bs-body-font-family);
+  color: #673c4f;
+  line-height: 1.6;
+}
+
+/* Styling videos */
+.instruction-video {
+  display: block;
+  width: 100%; /* Make video responsive */
+  max-height: 400px; /* Restrict height */
+  margin: 20px 0; /* Add spacing around videos */
+  border-radius: 10px; /* Rounded video corners */
+  
+}
+
+/* Heading styling */
+.card h2 {
+  font-size: 1.8rem; /* Larger heading */
+  color: #673c4f; /* Matching dark purple */
+  margin-bottom: 15px;
+  text-align: center; /* Center the title */
+}
+
+/* Paragraph styling */
+.card p {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #d8e9f0; 
+  border-radius: 8px; /* Rounded corners for paragraphs */
+}
+
+/* Line break styling */
+.card p br {
+  margin-bottom: 10px; /* Adds space after each line break */
+}
+
+/* Highlight keywords */
+.card p strong {
+  color: #673c4f; /* Highlight important keywords */
+  font-weight: bold;
 }
