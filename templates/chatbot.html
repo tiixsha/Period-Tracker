@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
     {% include "header.html" %}
-    <header class="masthead" style = "background-color:rgb(255, 147, 189)">
+    <header class="masthead" style="background-color:rgb(255, 147, 189)">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <div class="site-heading">
                         <h1><b>FlowBot</b></h1>
-                        <span class="subheading"> Your cycle, your support</span>
+                        <span class="subheading">Your cycle, your support</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 <head>
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Chat Container */
-        .chat-container {
-            width: 90%; /* 90% width to be responsive */
-            max-width: 800px; /* Keep max-width reasonable */
-            min-width: 600px; /* Ensure chat is wide enough */
-            margin: 50px auto;
+        /* Main Container for flex layout */
+        .main-container {
+            display: flex;
+            justify-content: space-evenly; /* Space between the containers evenly */
+            gap: 30px; /* Space between the two containers */
+            margin: 60px auto;
+            max-width: 80%;
+        }
+
+        /* Common style for both containers */
+        .container-box {
+            flex: 1;
             border: 1px solid #ddd;
             border-radius: 12px; /* Rounded corners for a more friendly look */
-            padding: 20px;
+            padding: 40px; /* Increased padding for larger look */
             background-color: #f9f9f9; /* Light background for the container */
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+            display: flex;
+            flex-direction: column;
         }
-    
+
         /* Messages Container */
         .messages {
-            height: 400px;
+            flex: 1;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px; /* Increased padding for larger look */
             background-color: #fff; /* White background for messages */
             border-radius: 8px;
             border: 1px solid #e0e0e0;
@@ -87,10 +94,10 @@
     
         .input-area input {
             width: 85%;
-            padding: 12px 15px;
+            padding: 14px 20px; /* Increased padding */
             border-radius: 20px;
             border: 1px solid #ddd;
-            font-size: 16px;
+            font-size: 18px; /* Larger font size */
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s;
@@ -102,13 +109,13 @@
     
         /* Submit Button */
         .input-area button {
-            padding: 12px 20px;
-            background-color:rgb(37, 150, 190); /* Button color */
+            padding: 14px 25px; /* Increased padding */
+            background-color: rgb(37, 150, 190); /* Button color */
             color: white;
             border: none;
             border-radius: 30px; /* Round button */
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px; /* Larger font size */
             transition: background-color 0.3s, transform 0.2s;
         }
     
@@ -121,14 +128,21 @@
             background-color: rgb(19, 94, 123); /* Even darker on click */
         }
     </style>
-    
 </head>
-<body class = "chatbot">
-    <div class="chat-container">
-        <div class="messages" id="chatMessages"></div>
-        <div class="input-group">
-            <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
-            <button class="btn btn-primary" id="sendButton">Send</button>
+<body class="chatbot">
+    <div class="main-container">
+        <div class="container-box">
+            <div class="messages" id="chatMessages"></div>
+            <div class="input-group input-area">
+                <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
+                <button class="btn btn-primary" id="sendButton">Send</button>
+            </div>
+        </div>
+
+        <div class="container-box">
+            <!-- Add any additional content or widgets here -->
+            <h2>Information</h2>
+            <p>Here you can add additional information or widgets related to the chat.</p>
         </div>
     </div>
 

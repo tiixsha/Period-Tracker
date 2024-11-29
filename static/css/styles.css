@@ -10903,7 +10903,7 @@ header img {
 .header-title {
     display: flex;
     align-items: center;
-    color: white;
+    color:#be718f;
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -10980,7 +10980,7 @@ body.home {
 /* Header Styles */
 header {
   background-color: #d6cfc7;
-  padding: 8px 60px;
+  padding: 10px 60px;
   display: flex;
   font-family: var(--bs-body-font-family);
   text-align: center;
@@ -11277,3 +11277,109 @@ footer p {
   font-size: 1rem;
 }
 
+body.chatbot{
+
+}
+/* Chat Container */
+.chat-container {
+  width: 90%; /* 90% width to be responsive */
+  max-width: 800px; /* Keep max-width reasonable */
+  min-width: 600px; /* Ensure chat is wide enough */
+  margin: 50px auto;
+  border: 1px solid #ddd;
+  border-radius: 12px; /* Rounded corners for a more friendly look */
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background for the container */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+}
+
+/* Messages Container */
+.messages {
+  height: 400px;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: #fff; /* White background for messages */
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.message {
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 75%; /* Ensure message doesn't take up full width */
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Style for the user’s message */
+.message.user {
+  background-color: #37a9e1; /* Light blue background for user */
+  color: white;
+  text-align: right; /* User messages align to the right */
+  margin-left: auto;
+}
+
+/* Style for the bot’s message */
+.message.bot {
+  background-color: #e0e0e0; /* Light gray background for bot */
+  color: #333;
+  text-align: left; /* Bot messages align to the left */
+  margin-right: auto;
+}
+
+/* Scrollbar styling */
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Message Input Area */
+.input-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.input-area input {
+  width: 85%;
+  padding: 12px 15px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.input-area input:focus {
+  border-color: #37a9e1; /* Focus state with blue border */
+}
+
+/* Submit Button */
+.input-area button {
+  padding: 12px 20px;
+  background-color:rgb(37, 150, 190); /* Button color */
+  color: white;
+  border: none;
+  border-radius: 30px; /* Round button */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.input-area button:hover {
+  background-color: rgb(37, 150, 190); /* Darker shade on hover */
+  transform: scale(1.05); /* Slight grow effect on hover */
+}
+
+.input-area button:active {
+  background-color: rgb(19, 94, 123); /* Even darker on click */
+}

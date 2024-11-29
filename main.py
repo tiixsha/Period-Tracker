@@ -12,6 +12,8 @@ from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 import random
 import requests
+import smtplib
+
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -75,7 +77,12 @@ class RegisterForm(FlaskForm):
         if existing_user_username:
             raise ValidationError(
                 'That username already exists. Please choose a different one.')
-
+        
+class Emaildb(db.Model):
+    id = db.Column(db.Integer, primary_key=True) 
+    user_id = db.Column(db.Integer,nullable=False) 
+    user_email = db.Column(db.String(40),nullable = False)
+    next_period = db.Column(db.Integer,nullable = False)
 
 class LoginForm(FlaskForm):
     username = StringField(validators=[
@@ -134,7 +141,8 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-@app.route('/add', methods=['POST']) 
+@app.route('/add', methods=['POST'])
+@login_required
 def add_period():
     try:
     
@@ -198,9 +206,7 @@ def determine_menstrual_phase(days_remaining):
     else:
         return "Menstrual Phase","Low"
 
-
-@app.route('/next_cycle')
-def next_cycle():
+def calculate_period():
     periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()#extracts data from Period class in ascending order of date.(latest addded at last)
     if len(periods) < 2:
         return render_template('next_cycle.html',msg_sent = False,msg = "Not enough data to predict your cycle")
@@ -213,6 +219,13 @@ def next_cycle():
         ovulation_date = next_period_date - timedelta(days=14)
         discharge_date = ovulation_date - timedelta(days=random.randint(5, 7))
         days_remaining = (next_period_date-datetime.now()).days
+        return days_remaining,next_period_date
+
+
+@app.route('/next_cycle')
+@login_required
+def next_cycle():
+        days_remaining,next_period_date = calculate_period()
         if days_remaining < 0:
             return render_template('next_cycle.html',msg_sent = False,msg = "Irregular period detected. It is better to seek medical help if it lasts more than 35 days.")
         elif days_remaining > 35:
@@ -224,6 +237,7 @@ def next_cycle():
 
 
 @app.route('/delete/<int:period_id>', methods=["GET", "POST"])
+@login_required
 def delete(period_id):
     # Convert the string date back to datetime obj
     period_to_delete = Period.query.filter_by(id=period_id).first()
@@ -250,7 +264,7 @@ def chat  ():
 
     return jsonify({'response': bot_response})
     
-    # Simple chatbot logic (replace this with actual chatbot logic)
+    # Simple chatbot logic
     if user_message.lower() == "hello":
         bot_response = "Hi there! How can I assist you today?"
     elif user_message.lower() == "bye":
@@ -265,12 +279,47 @@ def beginners():
     return render_template("beginners.html")
 
 @app.route('/history')
+@login_required
 def history():
     periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()
     period_dates = [period.period_date for period in periods]
     cycle_length = [(period_dates[i+1]-period_dates[i]).days for i in range(len(period_dates)-1)]
     labels=[i+1 for i in range(len(cycle_length))]
     return render_template('history.html',values=cycle_length,labels=labels)
+
+@app.route('/receive_email', methods=["POST"]) 
+@login_required 
+def receive_email(): 
+    if request.method == "POST":
+        user_mail = request.form.get("email")
+        if user_mail:
+                days_remaining,next_period_date = calculate_period()
+                new_mail = Emaildb(user_email=user_mail, user_id=current_user.id, next_period=days_remaining)
+                db.session.add(new_mail)
+                db.session.commit()
+                MY_EMAIL = "tishamdr123@gmail.com"
+                MY_PASSWORD = "najy zwnk njhy cnbl"
+                if days_remaining==14:
+                    content = "🌸 Ovulation Day Alert! 🌸: Today is a key day in your cycle—it's your ovulation day! This means your chances of conception are at their highest. Take care of yourself and make the most of it!"
+                elif days_remaining == 3 | days_remaining == 2 | days_remaining == 1:
+                    content = f"🗓️ Period Reminder! 🗓️: Just a heads-up, your period is only {{days_remaining}} days away. Now's a great time to prepare and ensure you have everything you need. Take care and be kind to yourself!"
+                elif days_remaining == 0:
+                    content = "🌹 Period Day Alert! 🌹: Today marks the start of your period. Remember to take extra care of yourself during this time. To help ease period pain, try incorporating foods like dark leafy greens, which are rich in iron and help replenish lost nutrients. Bananas are great for cramps and bloating due to their high potassium content. Nuts and seeds are packed with magnesium, which can help reduce muscle cramps. Berries are full of antioxidants and vitamins, helping to reduce inflammation. Chamomile tea is known for its soothing effects and can help relax your muscles and ease cramps. Take it easy and nurture your body today!"
+                else:
+                    content = f"🗓️ Period Countdown Alert! 🗓️ Just a friendly reminder, there are only {days_remaining} days remaining until your period. Now's a perfect time to get prepared and ensure you have everything you need. Take it easy and be kind to yourself!"
+                
+                with smtplib.SMTP("smtp.gmail.com",port = 587) as connection:
+                    connection.starttls()
+                    connection.login(MY_EMAIL, MY_PASSWORD)
+                    connection.sendmail(
+                        from_addr=MY_EMAIL,
+                        to_addrs=user_mail,
+                        msg=f"Subject:FlowSync\n\n{content}".encode('utf-8')
+                        )
+                return redirect(url_for('home'))
+
+        else:
+            return "Email not provided", 400 # Handle the case where email is not provided 
 
 if __name__ == "__main__":
     with app.app_context():
