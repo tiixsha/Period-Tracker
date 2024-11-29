@@ -18,7 +18,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-"najy zwnk njhy cnbl"
 MY_EMAIL = "tishamdr123@gmail.com"
 MY_PASSWORD = os.environ.get("PASSWORD")
 
