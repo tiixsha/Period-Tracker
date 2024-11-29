@@ -14,6 +14,13 @@ import random
 import requests
 import smtplib
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+"najy zwnk njhy cnbl"
+MY_EMAIL = "tishamdr123@gmail.com"
+MY_PASSWORD = os.environ.get("PASSWORD")
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -297,8 +304,7 @@ def receive_email():
                 new_mail = Emaildb(user_email=user_mail, user_id=current_user.id, next_period=days_remaining)
                 db.session.add(new_mail)
                 db.session.commit()
-                MY_EMAIL = "tishamdr123@gmail.com"
-                MY_PASSWORD = "najy zwnk njhy cnbl"
+                
                 if days_remaining==14:
                     content = "🌸 Ovulation Day Alert! 🌸: Today is a key day in your cycle—it's your ovulation day! This means your chances of conception are at their highest. Take care of yourself and make the most of it!"
                 elif days_remaining == 3 | days_remaining == 2 | days_remaining == 1:
