@@ -213,10 +213,7 @@ def determine_menstrual_phase(days_remaining):
         return "Menstrual Phase","Low"
 
 def calculate_period():
-    periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()#extracts data from Period class in ascending order of date.(latest addded at last)
-    if len(periods) < 2:
-        return render_template('next_cycle.html',msg_sent = False,msg = "Not enough data to predict your cycle")
-    else:
+        periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()
         period_dates = [period.period_date for period in periods] # creates a list of period_dates from our database
         cycle_length = [(period_dates[i+1]-period_dates[i]).days for i in range(len(period_dates)-1)]
         avg_cycle_length = sum(cycle_length)/len(cycle_length)
@@ -231,6 +228,11 @@ def calculate_period():
 @app.route('/next_cycle')
 @login_required
 def next_cycle():
+        periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()#extracts data from Period class in ascending order of date.(latest addded at last)
+        if len(periods) < 2:
+            return render_template('next_cycle.html',msg_sent = False,msg = "Not enough data to predict your cycle")
+        else:
+            calculate_period()
         days_remaining,next_period_date = calculate_period()
         if days_remaining < 0:
             return render_template('next_cycle.html',msg_sent = False,msg = "Irregular period detected. It is better to seek medical help if it lasts more than 35 days.")
@@ -299,7 +301,11 @@ def receive_email():
     if request.method == "POST":
         user_mail = request.form.get("email")
         if user_mail:
-                days_remaining,next_period_date = calculate_period()
+                periods = Period.query.filter_by(user_id=current_user_id).order_by(Period.period_date.asc()).all()#extracts data from Period class in ascending order of date.(latest addded at last)
+                if len(periods) < 2:
+                    return render_template('next_cycle.html',msg_sent = False,msg = "Not enough data to predict your cycle")
+                else:
+                    days_remaining,next_period_date = calculate_period()
                 new_mail = Emaildb(user_email=user_mail, user_id=current_user.id, next_period=days_remaining)
                 db.session.add(new_mail)
                 db.session.commit()
@@ -321,7 +327,7 @@ def receive_email():
                         to_addrs=user_mail,
                         msg=f"Subject:FlowSync\n\n{content}".encode('utf-8')
                         )
-                return redirect(url_for('home'))
+                return redirect(url_for('index'))
 
         else:
             return "Email not provided", 400 # Handle the case where email is not provided 
